@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main_content %}
+    <h1 class="register-title">注册</h1>
+    <form method="POST" action="{% url 'register' %}">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <div class="form-group">
+            <label for="id_username">用户名：</label>
+            {{ form.username }}
+            <small class="text-muted">{{ form.username.help_text }}</small>
+            {% for error in form.username.errors %}
+                <div class="errorlist">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            <label for="id_email">电子邮箱：</label>
+            {{ form.email }}
+            <small class="text-muted">{{ form.email.help_text }}</small>
+            {% for error in form.email.errors %}
+                <div class="errorlist">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            <label for="id_password1">密码：</label>
+            {{ form.password1 }}
+            <small class="text-muted">{{ form.password1.help_text }}</small>
+            {% for error in form.password1.errors %}
+                <div class="errorlist">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            <label for="id_password2">确认密码：</label>
+            {{ form.password2 }}
+            <small class="text-muted">{{ form.password2.help_text }}</small>
+            {% for error in form.password2.errors %}
+                <div class="errorlist">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="quiz-container">
+            <button type="submit" class="custom-button">注册</button>
+        </div>
+    </form>
+{% endblock %}

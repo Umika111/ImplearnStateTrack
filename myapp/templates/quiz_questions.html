@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main_content %}
+    <div class="quiz-container">
+        <h1 class="quiz-title">{{ test_title }}</h1>
+        <div class="form-container">
+        <form method="POST" action="{% url 'quiz_questions' %}" id="quizForm">
+            {% csrf_token %}
+            {{ form.as_p }}
+        </div>
+            <div class="quiz-container">
+                <button type="submit" class="custom-button">提交</button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- 提醒弹窗 -->
+    <div id="reminderModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>请认真学习</p>
+        </div>
+    </div>
+    
+    <style>
+        /* 弹窗样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 30% auto;
+            padding: 10px;
+            border: 1px solid #888;
+            width: 500px;
+            border-radius: 5px;
+            text-align: left;
+            font-size: 18px;
+            font-weight: bold;
+            color: red;
+        }
+
+        /* 表单内容左对齐 */
+        .form-container {
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: black;
+        }
+
+    </style>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取当前试卷ID
+            const testId = '{{ request.session.selected_test_id }}';
+            // 获取CSRF令牌
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            // 获取弹窗元素
+            const modal = document.getElementById('reminderModal');
+            const closeBtn = document.querySelector('.close');
+            
+            // 关闭弹窗
+            closeBtn.onclick = function() {
+                modal.style.display = "none";
+            }
+            
+            // 在窗口任意位置点击也可关闭弹窗
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+            
+            // 记录用户行为的函数
+            function recordAction(actionType, itemId, userAnswer) {
+                fetch('{% url "record_action" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        action_type: actionType,
+                        test_id: testId,
+                        item_id: itemId || null,
+                        source: 'web',
+                        user_answer: userAnswer || null
+                    })
+                });
+            }
+            
+            // 预测学生行为的函数
+            function predictBehavior() {
+                fetch('{% url "predict_behavior" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({
+                        test_id: testId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success' && data.prediction === 1) {
+                        // 如果预测结果为1，显示弹窗
+                        modal.style.display = "block";
+                    }
+                })
+                .catch(error => console.error('预测错误:', error));
+            }
+            
+            // 监听表单内容变化
+            const form = document.getElementById('quizForm');
+            const inputs = form.querySelectorAll('input, textarea, select');
+            
+            inputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const questionId = this.name.replace('question_', '');
+                    recordAction('respond', questionId, this.value);
+                });
+            });
+            
+            // 监听表单提交
+            form.addEventListener('submit', function(e) {
+                // 记录提交行为
+                recordAction('submit', null, null);
+            });
+            
+            // 每10秒进行一次预测
+            setInterval(predictBehavior, 10000);
+            
+            // 页面加载时记录进入行为
+            recordAction('enter', null, null);
+        });
+    </script>
+{% endblock %}

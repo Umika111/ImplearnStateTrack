@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main_content %}
+    <div class="quiz-container">
+        <h1 class="quiz-title">选择试卷</h1>
+        <form method="POST" action="{% url 'quiz' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ test_selection_form.test_id }}
+            </div>
+            <button type="submit" class="custom-button">开始答题</button>
+        </form>
+    </div>
+{% endblock %}

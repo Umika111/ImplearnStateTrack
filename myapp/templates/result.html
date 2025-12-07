@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main_content %}
+    <div class="result-container">
+        <div class="result-card">
+            <h1 class="result-title">测验结果</h1>
+            
+            <div class="score-display">
+                <div class="score-circle">
+                    <span class="score-value">{{ score|floatformat:0 }}%</span>
+                </div>
+            </div>
+            
+            <div class="result-details">
+                <p>您答对了 <strong>{{ correct_count }}</strong> 道题目（共 {{ total_questions }} 道）</p>
+                
+                {% if attention_status %}
+                <div class="attention-status {% if attention_status == '需要注意' %}attention-warning{% else %}attention-good{% endif %}">
+                    <h3>注意力状态:</h3>
+                    <p>{{ attention_status }}</p>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="result-actions">
+                <a href="{% url 'quiz' %}" class="action-button">重新选择试卷</a>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        .result-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 70vh;
+            padding: 20px;
+        }
+        
+        .result-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        .result-title {
+            color: #14345a;
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 30px;
+        }
+        
+        .score-display {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        .score-circle {
+            background-color: #14345a;
+            color: white;
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .score-value {
+            font-size: 40px;
+            font-weight: bold;
+        }
+        
+        .result-details {
+            text-align: center;
+            font-size: 18px;
+            margin: 30px 0;
+            color: #555;
+        }
+        
+        .result-details strong {
+            color: #14345a;
+            font-size: 20px;
+        }
+        
+        .attention-status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .attention-warning {
+            background-color: #ffebee;
+            border: 1px solid #ffcdd2;
+        }
+        
+        .attention-good {
+            background-color: #e8f5e9;
+            border: 1px solid #c8e6c9;
+        }
+        
+        .attention-status h3 {
+            margin-top: 0;
+            color: #14345a;
+            font-size: 18px;
+        }
+        
+        .attention-status p {
+            margin-bottom: 0;
+            font-weight: bold;
+            font-size: 20px;
+            color: #14345a;
+        }
+        
+        .result-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .action-button {
+            background-color: #14345a;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .action-button:hover {
+            background-color: #0e2440;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+{% endblock %}

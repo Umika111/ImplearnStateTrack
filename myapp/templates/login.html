@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main_content %}
+    <div class="login-container">
+        <h1 class="register-title">登录</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="quiz-container">
+                <button type="submit" class="custom-button">登录</button>
+            </div>
+            <!-- <button class="custom-button" onclick="location.href='{% url 'register' %}'">注册</button> -->
+        </form>
+    </div>
+{% endblock %}

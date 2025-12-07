@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+    <h1>学生学习记录</h1>
+    
+    <div class="student-selector">
+        <form method="get" action="{% url 'student_records' %}">
+            <label for="student_id">选择学生：</label>
+            <select name="student_id" id="student_id" onchange="this.form.submit()">
+                <option value="">-- 请选择学生 --</option>
+                {% for student in students %}
+                    <option value="{{ student.id }}" {% if selected_student_id == student.id|slugify %}selected{% endif %}>
+                        {{ student.username }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+    
+    {% if predictions %}
+        <div class="records-container">
+            <h2>预测记录</h2>
+            <table class="records-table">
+                <thead>
+                    <tr>
+                        <th>时间</th>
+                        <th>试卷名称</th>
+                        <th>注意力状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in predictions %}
+                        <tr>
+                            <td>{{ record.timestamp }}</td>
+                            <td>{{ record.test_name }}</td>
+                            <td>
+                                {% if record.prediction == 1 %}
+                                    <span class="warning">需要注意</span>
+                                {% else %}
+                                    <span class="normal">正常</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% elif selected_student_id %}
+        <p>该学生暂无学习记录。</p>
+    {% endif %}
+
+    <style>
+        .student-selector {
+            margin-bottom: 20px;
+        }
+        
+        .records-container {
+            margin-top: 20px;
+        }
+        
+        .records-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .records-table th, .records-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        .records-table th {
+            background-color: #14345a;
+            color: white;
+        }
+        
+        .records-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .warning {
+            color: red;
+            font-weight: bold;
+        }
+        
+        .normal {
+            color: green;
+        }
+    </style>
+{% endblock %} 

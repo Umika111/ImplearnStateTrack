@@ -1,0 +1,265 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>上海海洋大学在线教育平台</title>
+<style>
+    /* 全局样式 */
+    * {
+        box-sizing: border-box; /* 确保边框和内边距不会影响总宽度 */
+        margin: 0; /* 移除默认外边距 */
+        padding: 0; /* 移除默认内边距 */
+    }
+    .errorlist {
+        background-color: white;
+        color: red;
+        padding: 10px;
+        border: none;
+    }
+    /* 导航栏样式 */
+    .navbar {
+        background-color: #14345a; /* 深蓝色背景 */
+        color: white; /* 文字颜色为白色 */
+        padding: 10px 20px;
+    }
+    /* 设置整个页面的背景颜色 */
+    body {
+        background-color: #edf1f5; /* 浅蓝色背景 */
+        font-family: Arial, sans-serif; /* 设置字体 */
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    li {
+        float: left;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    li a:hover {
+        background-color: #111;
+    }
+
+    /* 主内容区域样式 */
+    .main-content {
+        width: 40%; /* 设置宽度为页面宽度的 80% */
+        margin: 20px auto; /* 上下外边距为 20px，左右外边距自动，实现垂直和水平居中 */
+        padding: 20px; /* 添加内边距 */
+        background-color: white; /* 背景颜色为白色 */
+        border-radius: 8px; /* 添加圆角 */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+    }
+
+    /* 提交按钮样式 */
+    .submit-button {
+        background-color: #14345a; /* 深蓝色背景 */
+        color: white; /* 文字颜色为白色 */
+        border: none; /* 去掉边框 */
+        padding: 10px 20px; /* 添加内边距 */
+        border-radius: 4px; /* 添加圆角 */
+        cursor: pointer; /* 鼠标悬停时显示手型 */
+        margin: 20px auto; /* 水平居中 */
+    }
+
+    .submit-button:hover {
+        background-color: #111; /* 悬停时的背景颜色 */
+    }
+
+    /* 再答一遍按钮样式 */
+    .retry-button {
+        background-color: #14345a; /* 深蓝色背景 */
+        color: white; /* 文字颜色为白色 */
+        border: none; /* 去掉边框 */
+        padding: 10px 20px; /* 添加内边距 */
+        border-radius: 4px; /* 添加圆角 */
+        cursor: pointer; /* 鼠标悬停时显示手型 */
+        margin-top: 20px; /* 与上文的间距 */
+    }
+
+    .retry-button:hover {
+        background-color: #111; /* 悬停时的背景颜色 */
+    }
+
+    /* 美化下拉框 */
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+        font-size: 16px;
+        color: #333;
+    }
+
+    /* 美化按钮 */
+    .custom-button {
+        background-color: #14345a; /* 深蓝色背景 */
+        color: white; /* 文字颜色为白色 */
+        border: none; /* 去掉边框 */
+        padding: 10px 20px; /* 添加内边距 */
+        border-radius: 4px; /* 添加圆角 */
+        cursor: pointer; /* 鼠标悬停时显示手型 */
+        font-size: 16px; /* 字体大小 */
+        margin-top: 10px; /* 与表单字段的间距 */
+    }
+
+    .custom-button:hover {
+        background-color: #111; /* 悬停时的背景颜色 */
+    }
+
+
+    .register-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .register-title {
+        text-align: center;
+        color: #14345a;
+        font-size: 24px; /* 可以根据需要调整字体大小 */
+        margin-bottom: 20px; /* 添加一些间距 */
+    }
+
+
+    .form-group {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    .text-muted {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .custom-button {
+        background-color: #14345a;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+
+    .custom-button:hover {
+        background-color: #111;
+    }
+
+    .quiz-container {
+        text-align: center; /* 居中对齐 */
+    }
+
+    .quiz-title {
+        color: #14345a;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        width: 100%;
+    }
+
+    .custom-button {
+        background-color: #14345a;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+
+    .custom-button:hover {
+        background-color: #111;
+    }
+    /* 图片样式 */
+    .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #14345a;
+    color: white;
+    padding: 10px 20px;
+    }
+
+    .logo {
+        width: 50px;
+        height: auto;
+        margin-right: 10px;
+    }
+
+    .navbar-title {
+        margin: 0;
+    }
+</style>
+</head>
+<body>
+    <div class="navbar">
+        <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo">
+        <h1>在线教育平台</h1>
+    </div>
+    <ul>
+        {% if request.path != '/login/' and request.path != '/register/' %}
+
+        {% endif %}
+        {% if user.is_authenticated %}
+            {% if user.is_staff %}
+                <li><a href="{% url 'dashboard' %}">管理员后台</a></li>
+                <li><a href="{% url 'logout' %}">登出</a></li>
+            {% else %}
+                <li><a href="{% url 'quiz' %}">选择试卷</a></li>
+                <li><a href="{% url 'logout' %}">登出</a></li>
+            {% endif %}
+        {% else %}
+            {% if request.path == '/login/' %}
+                <li><a href="{% url 'register' %}">注册</a></li>
+            {% elif request.path == '/register/' %}
+                <li><a href="{% url 'login' %}">登录</a></li>
+            {% else %}
+                <li><a href="{% url 'register' %}">注册</a></li>
+                <li><a href="{% url 'login' %}">登录</a></li>
+            {% endif %}
+        {% endif %}
+    </ul>
+    <div class="main-content">
+        {% block main_content %}
+                <p>This is the default main content. It will be overridden by child templates.</p>
+        {% endblock %}
+    </div>
+</body>
+</html>
